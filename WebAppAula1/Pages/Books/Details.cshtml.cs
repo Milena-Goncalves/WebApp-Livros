@@ -1,0 +1,43 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using WebAppAula1.Data;
+using WebAppAula1.Models;
+
+namespace WebAppAula1.Pages.Books
+{
+    public class DetailsModel : PageModel
+    {
+        private readonly WebAppAula1.Data.WebAppAula1Context _context;
+
+        public DetailsModel(WebAppAula1.Data.WebAppAula1Context context)
+        {
+            _context = context;
+        }
+
+      public Book Book { get; set; } = default!; 
+
+        public async Task<IActionResult> OnGetAsync(int? id)
+        {
+            if (id == null || _context.Book == null)
+            {
+                return NotFound();
+            }
+
+            var book = await _context.Book.FirstOrDefaultAsync(m => m.Id == id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+            else 
+            {
+                Book = book;
+            }
+            return Page();
+        }
+    }
+}
